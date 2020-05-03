@@ -1,9 +1,6 @@
 #!groovy
 pipeline {
     agent any
-    environment {
-        PATH = "/snap/bin/:${PATH}"
-    }
     stages {
         stage('clean') {
             steps {
