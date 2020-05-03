@@ -8,14 +8,13 @@ import { config } from './config/config';
 import { V0MODELS } from './controllers/v0/model.index';
 
 const c = config.dev;
+const app = express();
 
-(async () => {
-  await sequelize.addModels(V0MODELS);
-  await sequelize.sync();
+  sequelize.addModels(V0MODELS);
+  sequelize.sync();
 
-  const app = express();
   const port = process.env.PORT || 8080; // default port to listen
-  
+
   app.use(bodyParser.json());
 
   //CORS Should be restricted
@@ -31,11 +30,13 @@ const c = config.dev;
   app.get( "/", async ( req, res ) => {
     res.send( "/api/v0/" );
   } );
-  
+
 
   // Start the Server
   app.listen( port, () => {
       console.log( `server running ` + c.url );
       console.log( `press CTRL+C to stop server` );
   } );
-})();
+
+
+export default app;
