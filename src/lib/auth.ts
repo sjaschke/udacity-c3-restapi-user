@@ -15,9 +15,8 @@ export async function comparePasswords(plainTextPassword: string, hash: string):
     return await bcrypt.compare(plainTextPassword, hash);
 }
 
-export function generateJWT(user: User): string {
-
-    return jwt.sign(user.short(), c.config.jwt.secret)
+export function generateJWT(user: { email: string }): string {
+    return jwt.sign(user, c.config.jwt.secret)
 }
 
 export function requireAuth(req: Request, res: Response, next: NextFunction) {
