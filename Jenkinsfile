@@ -1,6 +1,9 @@
 #!groovy
 pipeline {
     agent any
+    environment {
+        JWT_SECRET = "super_secret"
+    }
     stages {
         stage('clean') {
             steps {
