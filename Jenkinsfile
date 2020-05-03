@@ -1,13 +1,11 @@
 #!groovy
 pipeline {
     agent any
-    environment {
-        PATH = "/snap/bin/:${PATH}"
-    }
     stages {
         stage('clean') {
             steps {
                 sh 'npm run clean'
+                sh 'npm cache clean --force'
             }
         }
         stage('init') {
