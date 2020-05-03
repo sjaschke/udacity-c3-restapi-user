@@ -2,7 +2,7 @@
 pipeline {
     agent any
     environment {
-        PATH = "/var/lib/jenkins/.nvm/versions/node/v12.16.2/bin:${PATH}"
+        PATH = "/snap/bin/:${PATH}"
     }
     stages {
         stage('clean') {
@@ -20,6 +20,15 @@ pipeline {
                 sh 'npm run test'
             }
         }
+        stage('build docker image'){
+            when{
+                branch 'master'
+            }
+            steps{
+                sh 'docker build -t saja/udacity-restapi-user .'
+            }
+        }
+
         stage("SonarQube analysis") {
             steps {
                 script {
