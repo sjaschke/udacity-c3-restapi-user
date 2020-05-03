@@ -15,6 +15,11 @@ pipeline {
                 sh 'npm install'
             }
         }
+        stage('test') {
+            steps {
+                sh 'npm run test'
+            }
+        }
         stage("SonarQube analysis") {
             steps {
                 script {
