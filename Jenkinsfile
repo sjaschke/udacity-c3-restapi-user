@@ -28,7 +28,9 @@ pipeline {
         }
         stage('build docker image') {
             steps {
-                latestTag = sh(returnStdout: true, script: "git describe --tags --abbrev=0").trim()
+                script {
+                    latestTag = sh(returnStdout: true, script: "git describe --tags --abbrev=0").trim()
+                }
                 sh "docker build -t 'saja/udacity-restapi-user:${latestTag}' ."
             }
         }
