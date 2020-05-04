@@ -31,18 +31,6 @@ pipeline {
                 sh 'npm run test'
             }
         }
-        stage('build & push docker image') {
-            steps {
-                script {
-                    latestTag = sh(returnStdout: true, script: "git describe --tags --abbrev=0").trim()
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
-                        def customImage = docker.build("saja/udacity-restapi-user:${latestTag}")
-                        customImage.push()
-                    }
-                }
-            }
-        }
-
         stage("SonarQube analysis") {
             steps {
                 script {
@@ -66,6 +54,17 @@ pipeline {
             steps {
                 timeout(time: 5, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+        stage('build & push docker image') {
+            steps {
+                script {
+                    latestTag = sh(returnStdout: true, script: "git describe --tags --abbrev=0").trim()
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+                        def customImage = docker.build("saja/udacity-restapi-user:${latestTag}")
+                        customImage.push()
+                    }
                 }
             }
         }
