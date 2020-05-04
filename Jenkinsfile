@@ -21,6 +21,11 @@ pipeline {
                 sh 'npm run build'
             }
         }
+        stage('debug') {
+            steps {
+                sh 'groups'
+            }
+        }
         stage('test') {
             steps {
                 sh 'npm run test'
