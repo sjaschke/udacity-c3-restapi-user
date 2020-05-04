@@ -43,7 +43,7 @@ pipeline {
             steps {
                 script {
                     latestTag = sh(returnStdout: true, script: "git describe --tags --abbrev=0").trim()
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker') {
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
                         app.push("${latestTag}")
                         app.push("latest")
                     }
