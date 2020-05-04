@@ -57,8 +57,13 @@ pipeline {
                 }
             }
         }
-        stage('build & push docker image') {
-            steps {
+    }
+    post {
+        always {
+            junit 'reports/*.xml'
+        }
+        success {
+            script {
                 script {
                     latestTag = sh(returnStdout: true, script: "git describe --tags --abbrev=0").trim()
                     docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
@@ -67,11 +72,6 @@ pipeline {
                     }
                 }
             }
-        }
-    }
-    post {
-        always {
-            junit 'reports/*.xml'
         }
     }
 }
