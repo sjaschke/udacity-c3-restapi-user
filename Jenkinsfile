@@ -30,7 +30,7 @@ pipeline {
             steps {
                 script {
                     latestTag = sh(returnStdout: true, script: "git describe --tags --abbrev=0").trim()
-                    sh 'docker build -t \'saja/udacity-restapi-user:${latestTag}\' .'
+                    sh 'docker build -t saja/udacity-restapi-user:${latestTag} .'
                 }
             }
         }
