@@ -39,6 +39,15 @@ pipeline {
                 sh "docker build -t 'saja/udacity-restapi-user:${latestTag}' ."
             }
         }
+        stage('push docker image') {
+            script {
+                latestTag = sh(returnStdout: true, script: "git describe --tags --abbrev=0").trim()
+            }
+            docker.withRegistry('https://registry.hub.docker.com', 'docker') {
+                app.push("${latestTag}")
+                app.push("latest")
+            }
+        }
 
         stage("SonarQube analysis") {
             steps {
