@@ -26,12 +26,10 @@ pipeline {
                 sh 'npm run test'
             }
         }
-        stage('build docker image'){
-            when{
-                branch 'master'
-            }
-            steps{
-                sh 'docker build -t saja/udacity-restapi-user .'
+        stage('build docker image') {
+            steps {
+                latestTag = sh(returnStdout: true, script: "git describe --tags --abbrev=0").trim()
+                sh "docker build -t 'saja/udacity-restapi-user:${latestTag}' ."
             }
         }
 
@@ -49,8 +47,8 @@ pipeline {
                 }
             }
         }
-        stage("wait for analyzing"){
-            steps{
+        stage("wait for analyzing") {
+            steps {
                 sleep 30
             }
         }
