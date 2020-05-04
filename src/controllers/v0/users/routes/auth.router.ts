@@ -68,7 +68,7 @@ router.post('/', async (req: Request, res: Response) => {
 
     const password_hash = await generatePassword(plainTextPassword);
 
-    const newUser = await new User({
+    const newUser = new User({
         email: email,
         password_hash: password_hash
     });
@@ -77,6 +77,7 @@ router.post('/', async (req: Request, res: Response) => {
     try {
         savedUser = await newUser.save();
     } catch (e) {
+        console.error(e);
         throw e;
     }
 

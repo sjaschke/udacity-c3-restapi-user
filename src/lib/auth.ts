@@ -1,5 +1,4 @@
 import * as bcrypt from "bcrypt";
-import {User} from "../controllers/v0/users/models/User";
 import * as jwt from "jsonwebtoken";
 import * as c from "../config/config";
 import {Request, Response} from "express";
@@ -23,7 +22,6 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
     if (!req.headers || !req.headers.authorization){
         return res.status(401).send({ message: 'No authorization headers.' });
     }
-
 
     const token_bearer = req.headers.authorization.split(' ');
     if(token_bearer.length != 2){
