@@ -42,3 +42,5 @@ venv/
 !.elasticbeanstalk/*.global.yml
 
 docker.env
+reports/
+.nyc_output/
