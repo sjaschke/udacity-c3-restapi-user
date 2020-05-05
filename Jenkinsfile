@@ -1,6 +1,9 @@
 #!groovy
 pipeline {
     agent any
+    environment {
+        JWT_SECRET = "super_secret"
+    }
     stages {
         stage('clean') {
             steps {
@@ -13,20 +16,21 @@ pipeline {
                 sh 'npm install'
             }
         }
+        stage('build') {
+            steps {
+                sh 'npm run build'
+            }
+        }
+        stage('debug') {
+            steps {
+                sh 'groups'
+            }
+        }
         stage('test') {
             steps {
                 sh 'npm run test'
             }
         }
-        stage('build docker image'){
-            when{
-                branch 'master'
-            }
-            steps{
-                sh 'docker build -t saja/udacity-restapi-user .'
-            }
-        }
-
         stage("SonarQube analysis") {
             steps {
                 script {
@@ -41,8 +45,8 @@ pipeline {
                 }
             }
         }
-        stage("wait for analyzing"){
-            steps{
+        stage("wait for analyzing") {
+            steps {
                 sleep 30
             }
         }
@@ -57,6 +61,17 @@ pipeline {
     post {
         always {
             junit 'reports/*.xml'
+        }
+        success {
+            script {
+                if (env.BRANCH_NAME == 'master') {
+                    latestTag = sh(returnStdout: true, script: "git describe --tags --abbrev=0").trim()
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
+                        def customImage = docker.build("saja/udacity-restapi-user:${latestTag}")
+                        customImage.push()
+                    }
+                }
+            }
         }
     }
 }
