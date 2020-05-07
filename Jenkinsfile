@@ -2,7 +2,7 @@
 pipeline {
     agent any
     environment {
-        JWT_SECRET = "super_secret"
+        JWT_SECRET = "super_secret_for_tests"
     }
     stages {
         stage('clean') {
@@ -19,11 +19,6 @@ pipeline {
         stage('build') {
             steps {
                 sh 'npm run build'
-            }
-        }
-        stage('debug') {
-            steps {
-                sh 'groups'
             }
         }
         stage('test') {
@@ -47,7 +42,7 @@ pipeline {
         }
         stage("wait for analyzing") {
             steps {
-                sleep 30
+                sleep 30 //in seconds
             }
         }
         stage("Quality Gate") {
